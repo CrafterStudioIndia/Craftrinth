@@ -1,48 +1,120 @@
-<picture>
-	<source media="(prefers-color-scheme: light)" srcset=".github/assets/monorepo_cover_light.png">
-	<img alt="Modrinth Monorepo Cover" src=".github/assets/monorepo_cover.png">
-</picture>
+# Craftrinth
 
-![Issues](https://img.shields.io/github/issues-raw/Modrinth/code?color=c78aff&label=issues&style=for-the-badge)
-![Pull Requests](https://img.shields.io/github/issues-pr-raw/Modrinth/code?color=c78aff&label=PRs&style=for-the-badge)
-![Contributors](https://img.shields.io/github/contributors/Modrinth/code?color=c78aff&label=contributors&style=for-the-badge)
-![Lines of Code](https://img.shields.io/endpoint?url=https://loctopus.creeperkatze.dev/github/modrinth/code/badge?style=flat&logoColor=white&color=c78aff&style=for-the-badge)
-![Commit Activity](https://img.shields.io/github/commit-activity/m/Modrinth/code?color=c78aff&label=commits&style=for-the-badge)
-![Last Commit](https://img.shields.io/github/last-commit/Modrinth/code?color=c78aff&label=last%20commit&style=for-the-badge)
+Craftrinth is a high-performance, community-focused Minecraft launcher built on the Modrinth/Theseus platform. It combines Modrinth's complete mod and modpack ecosystem with native offline account support, custom skin rendering pipelines, Discord Rich Presence integration, and a modern desktop interface.
 
-## Modrinth Monorepo
+---
 
-Welcome to the Modrinth Monorepo, the primary codebase for the Modrinth website, app, API and documentation. It contains ![Lines of code](https://img.shields.io/endpoint?url=https://loctopus.creeperkatze.dev/github/modrinth/code/badge%3Fformat%3Dhuman&logoColor=white&color=black&label=) lines of code and has ![Contributors](https://img.shields.io/github/contributors/Modrinth/code?color=black&label=) contributors!
+## Architecture & Codebase Structure
 
-If you're not a developer and you've stumbled upon this repository, you can access the web interface on the [Modrinth website](https://modrinth.com) and download the latest release of the app [here](https://modrinth.com/app).
+Craftrinth is structured as a Turborepo monorepo using `pnpm` workspaces for frontend packages and Cargo workspaces for Rust components:
 
-## Development
+```
+Craftrinth/
+├── apps/
+│	├── app/                 # Tauri 2 desktop shell (Rust)
+│	│	├── src/api/         # Tauri IPC commands & native bindings
+│	│	└── tauri.conf.json  # Application permissions & window settings
+│	├── app-frontend/        # Main launcher UI (Vue 3, Vite, Tailwind CSS)
+│	│	├── src/app/shell/   # Sidebar, title bar, navigation layout
+│	│	├── src/components/  # Offline login, modals, Discord RPC widgets
+│	│	├── src/features/    # Account manager, instance settings, onboarding
+│	│	└── src/pages/       # Browse, Skins, Instance management, Library
+│	├── frontend/            # Web platform interface (Nuxt 3)
+│	├── labrinth/            # Backend API service (Rust / Actix)
+│	└── docs/                # Developer documentation (Astro)
+├── packages/
+│	├── app-lib/             # Core launcher engine (Rust)
+│	│	├── resources/       # Bundled runtime JARs (PrimeAuthLib)
+│	│	├── src/api/         # Instance runner, Minecraft auth, process monitor
+│	│	├── src/launcher/    # Java execution, args parser, custom skin loader
+│	│	└── src/state/       # SQLite database (app.db), settings, Discord RPC
+│	├── ui/                  # Shared UI components library (@modrinth/ui)
+│	├── assets/              # Icons, stylesheets, branding assets (@modrinth/assets)
+│	└── api-client/          # TypeScript client for Modrinth API
+└── buildappimage.sh         # Linux AppImage compilation & packaging script
+```
 
-This repository contains several projects. For detailed development information, please refer to their respective guides:
+---
 
-| Project       | Directory              | Guide                                                     |
-| ------------- | ---------------------- | --------------------------------------------------------- |
-| Website       | `apps/frontend`        | [Guide](https://docs.modrinth.com/contributing/knossos/)  |
-| App           | `apps/app`             | [Guide](https://docs.modrinth.com/contributing/theseus/)  |
-| API           | `apps/labrinth`        | [Guide](https://docs.modrinth.com/contributing/labrinth/) |
-| Documentation | `apps/docs`            | [Guide](https://docs.modrinth.com/contributing/docs/)     |
+## What We Changed
 
-Shared libraries live in `packages/`.
+Craftrinth extends the upstream launcher with key modifications for offline convenience and visual customization:
 
-## Contributing
+### 1. Offline & Cracked Account Support
+- **Modal Login Flow**: Added `OfflineSignInModal.vue` allowing instant username entry without requiring Microsoft authentication.
+- **Credential Storage**: Accounts are registered directly into the local SQLite database (`app.db`) as offline credentials with tokens flagged for offline validation.
+- **Bypass Verification**: Launch arguments adapt when launching offline accounts, setting username and offline UUID tokens while maintaining compatibility with online and LAN servers.
 
-We welcome contributions! Before submitting any contributions, please read our [contributing guidelines](https://docs.modrinth.com/contributing/getting-started/).
+### 2. Dual-Layer Skin & Head Pipeline
+- **Local Skin Storage**: Skins are stored locally in `~/.craftrinth/launcher/user/skin/{username}.png`.
+- **Bundled PrimeAuthLib**: Packaged `primeauthlib` runtime agents inside `packages/app-lib/resources/primeauthlib/` targeting Minecraft 1.21.x and modern versions. The JVM args injector automatically loads the agent (`-javaagent:...`) so skins render in-game on multiplayer and singleplayer worlds without third-party mods.
+- **In-Memory Head Avatar Generator**: Implemented canvas-based 8x8 slice-and-scale in `player-head.ts` with base and outer hat layer blending. Head avatars are created directly as memory object URLs, bypassing webview storage bottlenecks.
+- **Skin Studio & Fetcher**: `Skins.vue` supports local PNG uploads, 3D interactive previewing, and fetching skins from any valid username.
 
-If you plan to fork this repository for your own purposes, please review our [copying guidelines](COPYING.md).
+### 3. Discord Rich Presence (RPC)
+- **Game State & Timer**: Real-time presence reporting current launcher activity ("Playing <Instance>" or "Idling..."), elapsed playtime, and launcher status.
+- **Player Head Integration**: In `custom_skin.rs`, the player's 8x8 head texture is cropped, scaled to 64x64, and provisioned with a secure HTTPS URL stored in `{username}_head.url`. This URL is passed to Discord's RPC `small_image` asset so your actual skin head displays directly on Discord.
 
-## Security
+### 4. UI & Theme Revamp
+- **Sidebar Layout**: Integrated a sleek profile header at the top of the sidebar displaying the active player head, username, quick instance switcher, and installations manager.
+- **Adaptive Brand & Icons**: Craftrinth identity with pixel-aligned instance icons and dark-mode theme adaptations.
 
-If you discover a security vulnerability within our codebase, please follow our [responsible disclosure guidelines](https://modrinth.com/legal/security).
+### 5. Standalone AppImage Build Pipeline
+- `buildappimage.sh` builds the frontend with Vite, compiles the release binary with embedded assets via Cargo, and bundles everything into a portable AppImage without requiring system FUSE setup.
 
-## Support
+---
 
-If you need help with the Modrinth web interface or app, please visit our [support page](https://support.modrinth.com). For general inquiries, you can also join our [Discord server](https://discord.modrinth.com).
+## Network Connections & External Traffic
+
+Craftrinth communicates with external endpoints only when necessary for game operations, content downloads, and account management:
+
+| Destination / Endpoint | Protocol | Purpose | Trigger / Condition |
+| ---------------------- | -------- | ------- | ------------------- |
+| `api.modrinth.com` | HTTPS | Fetch mod metadata, modpacks, loaders, versions, changelogs, search | Browsing or updating instances, installing mods |
+| `cdn.modrinth.com` | HTTPS | Download mod jars, resource packs, world files | Installing content or modpack assets |
+| `piston-meta.mojang.com` / `launchermeta.mojang.com` | HTTPS | Retrieve official Minecraft version manifests and release indices | Initial installation or game version check |
+| `libraries.minecraft.net` | HTTPS | Download vanilla game client JARs, natives, and library files | Installing or updating game versions |
+| `resources.download.minecraft.net` | HTTPS | Vanilla game assets (sounds, textures, language maps) | Asset index verification during launch |
+| `meta.fabricmc.net` / `maven.neoforged.net` / `maven.minecraftforge.net` / `maven.quiltmc.org` | HTTPS | Loader metadata, installers, and dependency libraries | Installing Fabric, NeoForge, Forge, or Quilt |
+| `login.microsoftonline.com` / `user.auth.xboxlive.com` | HTTPS | Microsoft OAuth and Xbox token authentication | **Only** when signing in with an official Microsoft account |
+| `mc-heads.net` | HTTPS | Fallback player head previews | Online accounts without a local custom skin |
+| `catbox.moe/user/api.php` | HTTPS | Temporary public hosting for player head PNG | When setting custom skin Discord RPC avatar |
+| `127.0.0.1` (Discord IPC Pipe) | Local IPC | Discord Rich Presence updates | While Discord desktop client is running |
+
+> [!NOTE]
+> Offline accounts do **not** transmit passwords or authentication requests to Microsoft or Mojang servers. Game launch runs locally with custom skin injection handled via local memory/agents.
+
+---
+
+## Development & Building
+
+### Prerequisites
+- **Node.js**: v20 or later
+- **pnpm**: v9 or later
+- **Rust**: 1.80+ (`rustup toolchain install stable`)
+- **System dependencies (Linux)**: `webkit2gtk-4.1`, `openssl`, `libappindicator-gtk3`, `libasound2-dev`
+
+### Running in Development
+```bash
+# 1. Install dependencies
+pnpm install
+
+# 2. Run the desktop application in dev mode
+pnpm app:dev
+```
+
+### Packaging the Release AppImage
+```bash
+chmod +x buildappimage.sh
+./buildappimage.sh
+```
+The output executable will be created at:
+```bash
+dist/Craftrinth-x86_64.AppImage
+```
+
+---
 
 ## License
 
-All packages in this repository are licensed under their respective licenses. See the [copying guidelines](COPYING.md) for details, including restrictions on Modrinth branding.
+Craftrinth is distributed under the GNU General Public License v3 (or upstream component licenses where applicable). See `COPYING.md` for specific package licenses and attribution notices.
