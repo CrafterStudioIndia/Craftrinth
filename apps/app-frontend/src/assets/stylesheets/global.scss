@@ -1,0 +1,480 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import '@modrinth/ui/src/styles/tailwind-utilities.css';
+
+@font-face {
+	font-family: 'bundled-minecraft-font-mrapp';
+	font-style: normal;
+	font-display: swap;
+	font-weight: 400;
+	src: url('https://cdn.modrinth.com/fonts/minecraft/regular.otf') format('opentype');
+}
+
+@font-face {
+	font-family: 'bundled-minecraft-font-mrapp';
+	font-style: italic;
+	font-display: swap;
+	font-weight: 400;
+	src: url('https://cdn.modrinth.com/fonts/minecraft/italic.otf') format('opentype');
+}
+
+@font-face {
+	font-family: 'bundled-minecraft-font-mrapp';
+	font-style: normal;
+	font-display: swap;
+	font-weight: 600;
+	src: url('https://cdn.modrinth.com/fonts/minecraft/bold.otf') format('opentype');
+}
+
+@font-face {
+	font-family: 'bundled-minecraft-font-mrapp';
+	font-style: italic;
+	font-display: swap;
+	font-weight: 600;
+	src: url('https://cdn.modrinth.com/fonts/minecraft/bold-italic.otf') format('opentype');
+}
+
+.font-minecraft {
+	font-family: 'bundled-minecraft-font-mrapp', monospace;
+}
+
+:root {
+	font-family: var(--font-standard, sans-serif), sans-serif;
+	color-scheme: dark;
+	--view-width: calc(100% - 5rem);
+	--expanded-view-width: calc(100% - 13rem);
+	--medal-promotion-bg: #000;
+	--medal-promotion-bg-orange: rgba(255, 255, 255, 0.15);
+	--medal-promotion-text-orange: #d1d5db;
+	--medal-promotion-bg-gradient: linear-gradient(
+		90deg,
+		rgba(255, 255, 255, 0.08),
+		rgba(0, 0, 0, 0) 100%
+	);
+
+	--radius-xs: 0px !important;
+	--radius-sm: 0px !important;
+	--radius-md: 0px !important;
+	--radius-lg: 0px !important;
+	--radius-xl: 0px !important;
+	--radius-max: 0px !important;
+	--size-rounded-sm: 0px !important;
+	--size-rounded-md: 0px !important;
+	--size-rounded-lg: 0px !important;
+	--size-rounded-xl: 0px !important;
+}
+
+html.light-mode {
+	color-scheme: light;
+}
+
+html,
+body,
+#app {
+	background-color: #0e0e0e;
+}
+
+body {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	border-radius: 0px !important;
+}
+
+.card-divider {
+	background-color: var(--color-button-bg);
+	border: none;
+	color: var(--color-button-bg);
+	height: 1px;
+	margin: var(--gap-sm) 0;
+}
+
+.no-wrap {
+	white-space: nowrap;
+}
+
+.no-select {
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+	-webkit-font-smoothing: antialiased;
+	will-change: filter;
+}
+
+.badge {
+	display: flex;
+	border-radius: var(--radius-md);
+	white-space: nowrap;
+	align-items: center;
+	background-color: var(--color-bg);
+	padding-block: var(--gap-sm);
+	padding-inline: var(--gap-lg);
+	width: min-content;
+
+	svg {
+		width: 1.1rem;
+		height: 1.1rem;
+		margin-right: 0.5rem;
+	}
+
+	&.featured {
+		background-color: var(--color-brand-highlight);
+		color: var(--color-contrast);
+	}
+}
+
+* {
+	scrollbar-width: auto;
+	scrollbar-color: var(--color-scrollbar) var(--color-bg);
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+	width: 16px;
+	border: 3px solid transparent;
+	opacity: 0.5;
+	transition: opacity 0.2s ease-in-out;
+}
+
+*::-webkit-scrollbar:hover {
+	opacity: 1;
+}
+
+*::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+	background-color: var(--color-scrollbar);
+	border-radius: var(--radius-lg);
+	border: 5px solid transparent;
+	background-clip: content-box;
+}
+
+.highlighted {
+	box-shadow: 0 0 1rem var(--color-brand) !important;
+}
+
+.gecko {
+	background-color: var(--color-raised-bg);
+	box-shadow: none !important;
+}
+
+img {
+	user-select: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+}
+
+.card-shadow {
+	box-shadow: var(--shadow-card);
+}
+
+// From the Bootstrap project
+// The MIT License (MIT)
+// Copyright (c) 2011-2023 The Bootstrap Authors
+// https://github.com/twbs/bootstrap/blob/2f617215755b066904248525a8c56ea425dde871/scss/mixins/_visually-hidden.scss#L8
+.visually-hidden {
+	width: 1px !important;
+	height: 1px !important;
+	padding: 0 !important;
+	margin: -1px !important;
+	overflow: hidden !important;
+	clip: rect(0, 0, 0, 0) !important;
+	white-space: nowrap !important;
+	border: 0 !important;
+
+	&:not(caption) {
+		position: absolute !important;
+	}
+}
+
+@import '@modrinth/assets/omorphia.scss';
+
+input {
+	border-radius: var(--size-rounded-sm);
+	box-sizing: border-box;
+	border: 2px solid transparent;
+	// safari iOS rounds inputs by default
+	// set the appearance to none to prevent this
+	appearance: none !important;
+}
+
+pre {
+	font-weight: var(--font-weight-regular);
+}
+
+input,
+textarea {
+	background: var(--color-button-bg);
+	color: var(--color-text);
+	padding: 0.5rem 1rem;
+	font-weight: var(--font-weight-medium);
+	border: none;
+	outline: 2px solid transparent;
+	box-shadow:
+		var(--shadow-inset-sm),
+		0 0 0 0 transparent;
+	transition: box-shadow 0.1s ease-in-out;
+	min-height: 36px;
+
+	&:focus,
+	&:focus-visible {
+		box-shadow:
+			inset 0 0 0 transparent,
+			0 0 0 0.25rem var(--color-brand-shadow);
+		color: var(--color-button-text-active);
+	}
+
+	&:disabled,
+	&[disabled='true'] {
+		opacity: 0.6;
+		pointer-events: none;
+		cursor: not-allowed;
+	}
+
+	&:focus::placeholder {
+		opacity: 0.8;
+	}
+
+	&::placeholder {
+		color: var(--color-button-text);
+		opacity: 0.6;
+	}
+}
+
+:root,
+.dark-mode,
+.dark,
+:root[data-theme='dark'] {
+	--surface-1: #111111;
+	--surface-1-5: #161616;
+	--surface-2: #1c1c1c;
+	--surface-2-5: #222222;
+	--surface-3: #2a2a2a;
+	--surface-4: #333333;
+	--surface-5: #444444;
+
+	--color-bg: #0e0e0e;
+	--color-raised-bg: #161616;
+	--color-super-raised-bg: #202020;
+
+	--color-brand: #e2e8f0;
+	--color-brand-highlight: rgba(255, 255, 255, 0.08);
+	--color-brand-shadow: rgba(255, 255, 255, 0.12);
+	--color-accent-contrast: #121212;
+
+	--brand-gradient-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
+	--brand-gradient-strong-bg: linear-gradient(135deg, #1c1c1c 0%, #262626 100%);
+	--brand-gradient-border: rgba(255, 255, 255, 0.12);
+	--brand-gradient-fade-out-color: linear-gradient(to bottom, rgba(14, 14, 14, 0), #0e0e0e 80%);
+
+	--color-gradient-button-bg: linear-gradient(135deg, #2b2b2b 0%, #1e1e1e 100%);
+	--color-button-bg-selected: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%);
+	--color-button-text-selected: #ffffff;
+}
+
+.nav-button.router-link-active::before {
+	background: rgba(255, 255, 255, 0.1) !important;
+	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25) !important;
+	border-radius: 0 !important;
+}
+
+html,
+body,
+#app,
+.app-grid-layout {
+	background-color: #0e0e0e !important;
+	background-image: url('/background.png') !important;
+	background-size: cover !important;
+	background-position: center !important;
+	background-repeat: no-repeat !important;
+	background-attachment: fixed !important;
+}
+
+.app-title-bar {
+	background: rgba(12, 12, 14, 0.88) !important;
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+}
+
+.topbar-nav-button {
+	height: 1.95rem !important;
+	min-height: 1.95rem !important;
+	width: auto !important;
+	min-width: 1.95rem !important;
+	padding: 0 0.65rem !important;
+	border-radius: 0 !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	gap: 0.375rem !important;
+	font-size: 0.8125rem !important;
+	font-weight: 600 !important;
+	letter-spacing: -0.01em !important;
+	background: rgba(255, 255, 255, 0.04) !important;
+	color: #c5c5c5 !important;
+	border: 1px solid rgba(255, 255, 255, 0.08) !important;
+	text-decoration: none !important;
+	transition: all 0.15s ease !important;
+
+	&:hover {
+		background: rgba(255, 255, 255, 0.1) !important;
+		color: #ffffff !important;
+		border-color: rgba(255, 255, 255, 0.22) !important;
+	}
+
+	&.router-link-active,
+	&.subpage-active {
+		background: rgba(56, 189, 248, 0.14) !important;
+		color: #ffffff !important;
+		border-color: rgba(56, 189, 248, 0.45) !important;
+		box-shadow: inset 0 -2px 0 0 #38bdf8 !important;
+	}
+
+	&::before {
+		display: none !important;
+	}
+}
+
+.topbar-nav-create {
+	padding: 0 0.55rem !important;
+	background: linear-gradient(135deg, rgba(56, 189, 248, 0.2) 0%, rgba(14, 165, 233, 0.12) 100%) !important;
+	border: 1px solid rgba(56, 189, 248, 0.4) !important;
+	color: #e0f2fe !important;
+
+	&:hover {
+		background: linear-gradient(135deg, rgba(56, 189, 248, 0.32) 0%, rgba(14, 165, 233, 0.2) 100%) !important;
+		border-color: rgba(56, 189, 248, 0.7) !important;
+		color: #ffffff !important;
+		box-shadow: 0 0 10px rgba(56, 189, 248, 0.2) !important;
+	}
+}
+
+.app-contents {
+	border-top-left-radius: 0 !important;
+	border-radius: 0 !important;
+	background: rgba(14, 14, 16, 0.72) !important;
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+	border-left: none !important;
+	box-shadow: none !important;
+}
+
+.loading-indicator-container {
+	border-top-left-radius: 0 !important;
+	border-radius: 0 !important;
+}
+
+.button-frame--colored,
+button[type="colored"],
+.button-colored {
+	background: linear-gradient(135deg, #2e2e2e 0%, #202020 100%) !important;
+	border: 1px solid #444444 !important;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4) !important;
+	color: #ffffff !important;
+	border-radius: 0 !important;
+	transition:
+		background 0.2s ease,
+		border-color 0.2s ease,
+		box-shadow 0.2s ease !important;
+}
+
+.button-frame--colored:hover:not(:disabled),
+button[type="colored"]:hover:not(:disabled),
+.button-colored:hover:not(:disabled) {
+	background: linear-gradient(135deg, #3d3d3d 0%, #2b2b2b 100%) !important;
+	border-color: #666666 !important;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5) !important;
+}
+
+.bg-button-bg {
+	background: #1a1a1a !important;
+	border-color: #2c2c2c !important;
+	border-radius: 0 !important;
+}
+
+.app-sidebar {
+	background: rgba(14, 14, 14, 0.9) !important;
+	backdrop-filter: blur(14px);
+	-webkit-backdrop-filter: blur(14px);
+	border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
+	border-left: none !important;
+}
+
+/* Rendering performance and smoothness */
+* {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body {
+	text-rendering: optimizeLegibility;
+	scroll-behavior: smooth;
+}
+
+.app-grid-layout,
+.app-contents,
+.app-sidebar {
+	transform: translateZ(0);
+	backface-visibility: hidden;
+}
+
+.app-background-image {
+	contain: strict;
+	will-change: transform;
+	transform: translate3d(0, 0, 0);
+	backface-visibility: hidden;
+}
+
+/* Sharp UI Revamp */
+.modal-container,
+.modal-content,
+.dialog,
+.dropdown-menu,
+.teleport-overflow-menu,
+.card,
+.input-text,
+.select,
+.combobox,
+.button,
+button,
+input,
+textarea {
+	border-radius: 0 !important;
+}
+
+/* Polished sharp custom scrollbars */
+::-webkit-scrollbar {
+	width: 6px;
+	height: 6px;
+}
+::-webkit-scrollbar-track {
+	background: rgba(14, 14, 14, 0.5);
+}
+::-webkit-scrollbar-thumb {
+	background: rgba(255, 255, 255, 0.2);
+	border-radius: 0;
+
+	&:hover {
+		background: rgba(255, 255, 255, 0.35);
+	}
+}

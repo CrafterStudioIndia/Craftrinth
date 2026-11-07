@@ -1,0 +1,128 @@
+# Compiled output & bundles
+dist/
+dist
+tmp/
+tmp
+/out-tsc
+target/
+target
+*.AppImage
+*.AppDir
+*.AppDir/
+squashfs-root/
+
+# Tauri bundles & installers
+*.deb
+*.rpm
+*.dmg
+*.exe
+*.msi
+*.tar.gz
+
+# Dependencies & package managers
+node_modules/
+node_modules
+.pnpm-store/
+
+# IDEs and editors
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+*.swp
+*.swo
+*~
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/i18n-ally-custom-framework.yml
+
+# IDE - IntelliJ
+.idea/*
+!.idea/code.iml
+!.idea/gradle.xml
+!.idea/icon.svg
+!.idea/modules.xml
+!.idea/vcs.xml
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+testem.log
+/libpeerconnection.log
+*storybook.log
+
+# Misc & temporary caches
+/.sass-cache
+/connect.lock
+/coverage
+/typings
+.cache
+.turbo
+
+# System Files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Nuxt dev/build outputs
+.output
+.data
+.nuxt
+.nitro
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Local launcher state / runtime data
+.craftrinth/
+.createlauncher/
+app-playground-data/*
+
+# Frontend generated files
+apps/frontend/src/generated
+/packages/ui/src/layouts/wrapped/settings/language-settings/language-settings-coverage.generated.ts
+
+# Generated code exceptions
+generated
+!apps/app-frontend/src/generated/
+!apps/app-frontend/src/generated/app-events/
+!apps/app-frontend/src/generated/app-events/*.ts
+!apps/app-frontend/src/generated/app-events/README.md
+!apps/app-frontend/src/generated/app-events/postcard/
+!apps/app-frontend/src/generated/app-events/postcard/index.d.ts
+!apps/app-frontend/src/generated/app-events/postcard/index.js
+!apps/app-frontend/src/generated/app-events/postcard/package.json
+
+.astro
+.claude/
+.letta
+
+# Labrinth demo fixtures
+apps/labrinth/fixtures/demo
+storybook-static
+
+.wrangler/
+
+# Frontend robots.txt
+apps/frontend/src/public/robots.txt
+
+# Oh My Code
+.omc/
+
+# Local dry-run output
+/test_result.md
+
+packages/tooling-config/script-utils/import-sort.js
+references/
