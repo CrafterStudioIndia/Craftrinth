@@ -54,7 +54,21 @@ const messages = defineMessages({
 		id: 'app.settings.default-instance-options.height.placeholder',
 		defaultMessage: 'Enter height...',
 	},
+	mesa3dPreset: {
+		id: 'app.settings.default-instance-options.mesa3d-preset',
+		defaultMessage: 'Mesa3D Performance Presets',
+	},
+	mesa3dPresetDesc: {
+		id: 'app.settings.default-instance-options.mesa3d-preset.desc',
+		defaultMessage: 'Quick resolution presets optimized for CPU rendering when using Mesa3D software rasterization.',
+	},
 })
+
+function applyMesaResolution(w: number, h: number) {
+	if (!settings.value) return
+	settings.value.force_fullscreen = false
+	settings.value.game_resolution = [w, h]
+}
 </script>
 
 <template>
@@ -112,6 +126,44 @@ const messages = defineMessages({
 					type="number"
 					:placeholder="formatMessage(messages.heightPlaceholder)"
 				/>
+			</div>
+
+			<!-- Mesa3D Performance Presets -->
+			<div class="flex flex-col gap-2 p-3.5 rounded-lg border border-surface-5 bg-surface-2/40">
+				<div class="flex flex-col gap-0.5">
+					<h3 class="m-0 text-sm font-semibold text-contrast">
+						{{ formatMessage(messages.mesa3dPreset) }}
+					</h3>
+					<p class="m-0 text-xs text-secondary">
+						{{ formatMessage(messages.mesa3dPresetDesc) }}
+					</p>
+				</div>
+				<div class="flex flex-wrap items-center gap-2 pt-1">
+					<button
+						type="button"
+						class="px-2.5 py-1 text-xs rounded border border-surface-5 bg-surface-3 hover:bg-surface-4 text-contrast cursor-pointer transition-colors"
+						:class="{ '!border-brand !bg-brand/20 font-semibold text-brand': settings.game_resolution[0] === 854 && settings.game_resolution[1] === 480 && !settings.force_fullscreen }"
+						@click="applyMesaResolution(854, 480)"
+					>
+						480p (854 × 480) • Best FPS
+					</button>
+					<button
+						type="button"
+						class="px-2.5 py-1 text-xs rounded border border-surface-5 bg-surface-3 hover:bg-surface-4 text-contrast cursor-pointer transition-colors"
+						:class="{ '!border-brand !bg-brand/20 font-semibold text-brand': settings.game_resolution[0] === 1024 && settings.game_resolution[1] === 768 && !settings.force_fullscreen }"
+						@click="applyMesaResolution(1024, 768)"
+					>
+						768p (1024 × 768) • 4:3 Balanced
+					</button>
+					<button
+						type="button"
+						class="px-2.5 py-1 text-xs rounded border border-surface-5 bg-surface-3 hover:bg-surface-4 text-contrast cursor-pointer transition-colors"
+						:class="{ '!border-brand !bg-brand/20 font-semibold text-brand': settings.game_resolution[0] === 1280 && settings.game_resolution[1] === 720 && !settings.force_fullscreen }"
+						@click="applyMesaResolution(1280, 720)"
+					>
+						720p (1280 × 720) • HD Standard
+					</button>
+				</div>
 			</div>
 		</template>
 		<Button v-else-if="settingsQuery.isError.value" @click="settingsQuery.refetch()">

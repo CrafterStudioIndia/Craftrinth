@@ -106,7 +106,21 @@ const messages = defineMessages({
 		id: 'instance.settings.tabs.window.height.enter',
 		defaultMessage: 'Enter height...',
 	},
+	mesa3dPreset: {
+		id: 'instance.settings.tabs.window.mesa3d-preset',
+		defaultMessage: 'Mesa3D Performance Presets',
+	},
+	mesa3dPresetDesc: {
+		id: 'instance.settings.tabs.window.mesa3d-preset.desc',
+		defaultMessage: 'Quick resolution presets optimized for CPU rendering when using Mesa3D software rasterization.',
+	},
 })
+
+function applyMesaResolution(w: number, h: number) {
+	overrideWindowSettings.value = true
+	fullscreenSetting.value = false
+	resolution.value = [w, h]
+}
 </script>
 
 <template>
@@ -172,6 +186,44 @@ const messages = defineMessages({
 					type="number"
 					:placeholder="formatMessage(messages.enterHeight)"
 				/>
+			</div>
+
+			<!-- Mesa3D Performance Presets -->
+			<div class="flex flex-col gap-2 p-3.5 rounded-lg border border-surface-5 bg-surface-2/40">
+				<div class="flex flex-col gap-0.5">
+					<h3 class="m-0 text-sm font-semibold text-contrast">
+						{{ formatMessage(messages.mesa3dPreset) }}
+					</h3>
+					<p class="m-0 text-xs text-secondary">
+						{{ formatMessage(messages.mesa3dPresetDesc) }}
+					</p>
+				</div>
+				<div class="flex flex-wrap items-center gap-2 pt-1">
+					<button
+						type="button"
+						class="px-2.5 py-1 text-xs rounded border border-surface-5 bg-surface-3 hover:bg-surface-4 text-contrast cursor-pointer transition-colors"
+						:class="{ '!border-brand !bg-brand/20 font-semibold text-brand': resolution[0] === 854 && resolution[1] === 480 && !fullscreenSetting }"
+						@click="applyMesaResolution(854, 480)"
+					>
+						480p (854 × 480) • Best FPS
+					</button>
+					<button
+						type="button"
+						class="px-2.5 py-1 text-xs rounded border border-surface-5 bg-surface-3 hover:bg-surface-4 text-contrast cursor-pointer transition-colors"
+						:class="{ '!border-brand !bg-brand/20 font-semibold text-brand': resolution[0] === 1024 && resolution[1] === 768 && !fullscreenSetting }"
+						@click="applyMesaResolution(1024, 768)"
+					>
+						768p (1024 × 768) • 4:3 Balanced
+					</button>
+					<button
+						type="button"
+						class="px-2.5 py-1 text-xs rounded border border-surface-5 bg-surface-3 hover:bg-surface-4 text-contrast cursor-pointer transition-colors"
+						:class="{ '!border-brand !bg-brand/20 font-semibold text-brand': resolution[0] === 1280 && resolution[1] === 720 && !fullscreenSetting }"
+						@click="applyMesaResolution(1280, 720)"
+					>
+						720p (1280 × 720) • HD Standard
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>
